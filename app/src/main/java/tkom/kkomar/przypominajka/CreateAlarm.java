@@ -1,5 +1,6 @@
 package tkom.kkomar.przypominajka;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -92,7 +93,9 @@ public class CreateAlarm extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.list_notes) {
+            Intent myIntent = new Intent(CreateAlarm.this, ChooseAlarm.class);
+            CreateAlarm.this.startActivity(myIntent);
             return true;
         }
 
