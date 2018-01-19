@@ -20,23 +20,27 @@ import java.io.OutputStreamWriter;
 public class CreateAlarm extends AppCompatActivity {
 
     private EditText tekst = null;
+    private String fileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle b = getIntent().getExtras();
+        if(b != null)
+            fileName = b.getString("fileName");
         setContentView(R.layout.activity_create_alarm);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        tekst = (EditText) findViewById(R.id.sourcefile);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        tekst = findViewById(R.id.sourcefile);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                save("Note1.txt");
+                save(fileName);
             }
         });
 
-        tekst.setText(open("Note1.txt"));
+        tekst.setText(open(fileName));
     }
 
     public String open(String fileName) {
