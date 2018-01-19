@@ -33,7 +33,6 @@ public class CreateAlarm extends AppCompatActivity {
         setContentView(R.layout.activity_create_alarm);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        tekst = findViewById(R.id.sourcefile);
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,7 +40,7 @@ public class CreateAlarm extends AppCompatActivity {
                 save(fileName);
             }
         });
-
+        tekst = findViewById(R.id.sourcefile);
         tekst.setText(open(fileName));
     }
 
@@ -78,7 +77,7 @@ public class CreateAlarm extends AppCompatActivity {
                     new OutputStreamWriter(openFileOutput(fileName, Context.MODE_PRIVATE));
             out.write(tekst.getText().toString());
             out.close();
-            Toast.makeText(this, "Note '" + fileName + "' Saved!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Zapisano!", Toast.LENGTH_SHORT).show();
         } catch (Throwable t) {
             Toast.makeText(this, "Exception: " + t.toString(), Toast.LENGTH_LONG).show();
         }
@@ -88,16 +87,5 @@ public class CreateAlarm extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_add_choose_alarm, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.list_notes) {
-            Intent myIntent = new Intent(null, ChooseAlarm.class);
-            CreateAlarm.this.startActivity(myIntent);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

@@ -56,7 +56,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
         }
 
         public void bind(final NotesBuilder item, final OnItemClickListener listener) {
-            title.setText(item.getContent());
+            title.setText(item.getTitle());
             content.setText(item.getContent());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {

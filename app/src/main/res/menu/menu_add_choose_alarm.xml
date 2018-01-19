@@ -2,8 +2,4 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="tkom.kkomar.przypominajka.CreateAlarm" >
-    <item android:id="@+id/list_notes"
-        android:title="Lista notatek"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
 </menu>

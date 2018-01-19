@@ -31,8 +31,22 @@ public class ChooseAlarm extends AppCompatActivity {
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_choose_alarm);
+            Toolbar toolbar = findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            FloatingActionButton fab = findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String newFile = addNewNote();
+                    Intent myIntent = new Intent(ChooseAlarm.this, CreateAlarm.class);
+                    Bundle b = new Bundle();
+                    b.putString(CreateAlarm.paramFileName, newFile);
+                    myIntent.putExtras(b);
+                    ChooseAlarm.this.startActivity(myIntent);
+                }
+            });
             refreshActivity();
-            //prepareNotes();
         }
 
         @Override
@@ -49,7 +63,7 @@ public class ChooseAlarm extends AppCompatActivity {
             File[] files = directory.listFiles();
             String theFile;
             for (int f = 1; f <= files.length; f++) {
-                theFile = "Note" + f + ".txt";
+                theFile = "alarm_" + f;
                 NotesBuilder note = new NotesBuilder(theFile, open(theFile));
                 notesList.add(note);
             }
@@ -58,15 +72,12 @@ public class ChooseAlarm extends AppCompatActivity {
         public String addNewNote()
         {
             int num = getFilesDir().listFiles().length + 1;
-            String theFile = "Note" + num + ".txt";
-//            NotesBuilder note = new NotesBuilder(theFile, "");
-//            File file = new File(getFilesDir(), theFile);
+            String theFile = "alarm_" + num;
             try {
                 OutputStreamWriter out =
                         new OutputStreamWriter(openFileOutput(theFile, Context.MODE_PRIVATE));
                 out.write("");
                 out.close();
-                Toast.makeText(this, "Note '" + theFile + "' Saved!", Toast.LENGTH_SHORT).show();
             } catch (Throwable t) {
                 Toast.makeText(this, "Exception: " + t.toString(), Toast.LENGTH_LONG).show();
             }
@@ -96,23 +107,6 @@ public class ChooseAlarm extends AppCompatActivity {
 
         private void refreshActivity()
         {
-            setContentView(R.layout.activity_choose_alarm);
-            Toolbar toolbar = findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-
-            FloatingActionButton fab = findViewById(R.id.fab);
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String newFile = addNewNote();
-                    Toast.makeText(getApplicationContext(), "Dodano plik " + newFile, Toast.LENGTH_LONG).show();
-                    Intent myIntent = new Intent(ChooseAlarm.this, CreateAlarm.class);
-                    Bundle b = new Bundle();
-                    b.putString(CreateAlarm.paramFileName, newFile);
-                    myIntent.putExtras(b);
-                    ChooseAlarm.this.startActivity(myIntent);
-                }
-            });
             notesRecycler = findViewById(R.id.notes);
             nAdapter = new NotesAdapter(notesList, new NotesAdapter.OnItemClickListener() {
                 @Override
