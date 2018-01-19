@@ -76,7 +76,7 @@ public class CreateAlarm extends AppCompatActivity {
                     new OutputStreamWriter(openFileOutput(fileName, 0));
             out.write(tekst.getText().toString());
             out.close();
-            Toast.makeText(this, "Note Saved!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Note '" + fileName + "' Saved!", Toast.LENGTH_SHORT).show();
         } catch (Throwable t) {
             Toast.makeText(this, "Exception: " + t.toString(), Toast.LENGTH_LONG).show();
         }

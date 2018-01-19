@@ -37,7 +37,13 @@ public class ChooseAlarm extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    addNewNote();
+                    String newFile = addNewNote();
+                    Toast.makeText(getApplicationContext(), "Dodano plik " + newFile, Toast.LENGTH_LONG).show();
+//                    Intent myIntent = new Intent(ChooseAlarm.this, CreateAlarm.class);
+//                    Bundle b = new Bundle();
+//                    b.putString("filename", newFile); //Your id
+//                    myIntent.putExtras(b);
+//                    ChooseAlarm.this.startActivity(myIntent);
                 }
             });
 
@@ -76,13 +82,13 @@ public class ChooseAlarm extends AppCompatActivity {
             }
         }
 
-        public void addNewNote()
+        public String addNewNote()
         {
             int num = getFilesDir().listFiles().length + 1;
             String theFile = "Note" + num + ".txt";
             NotesBuilder note = new NotesBuilder(theFile, open(theFile));
             notesList.add(note);
-            open(theFile);
+            return theFile;
         }
 
         public String open(String fileName) {
