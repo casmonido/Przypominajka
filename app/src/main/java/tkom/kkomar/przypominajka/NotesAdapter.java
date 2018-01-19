@@ -4,6 +4,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.List;
@@ -49,10 +51,12 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView title, content;
+        public Switch onoff;
         public ViewHolder(View view) {
             super(view);
             title = view.findViewById(R.id.title);
             content = view.findViewById(R.id.content);
+            onoff = view.findViewById(R.id.turnoff_on);
         }
 
         public void bind(final NotesBuilder item, final OnItemClickListener listener) {
@@ -61,6 +65,15 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     listener.onItemClick(item);
+                }
+            });
+
+            onoff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked == true)
+                    {
+                        // uruchom przypominajkę
+                    }
                 }
             });
         }
