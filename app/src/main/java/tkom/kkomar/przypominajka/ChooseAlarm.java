@@ -107,8 +107,8 @@ public class ChooseAlarm extends AppCompatActivity {
                     String newFile = addNewNote();
                     Toast.makeText(getApplicationContext(), "Dodano plik " + newFile, Toast.LENGTH_LONG).show();
                     Intent myIntent = new Intent(ChooseAlarm.this, CreateAlarm.class);
-                    Bundle b = new Bundle(); //nullptr exception
-                    b.putString("filename", newFile);
+                    Bundle b = new Bundle();
+                    b.putString(CreateAlarm.paramFileName, newFile);
                     myIntent.putExtras(b);
                     ChooseAlarm.this.startActivity(myIntent);
                 }
@@ -119,7 +119,7 @@ public class ChooseAlarm extends AppCompatActivity {
                 public void onItemClick(NotesBuilder nb) {
                     Intent myIntent = new Intent(ChooseAlarm.this, CreateAlarm.class);
                     Bundle b = new Bundle();
-                    b.putString("fileName", nb.getTitle());
+                    b.putString(CreateAlarm.paramFileName, nb.getTitle());
                     myIntent.putExtras(b);
                     ChooseAlarm.this.startActivity(myIntent);
                 }

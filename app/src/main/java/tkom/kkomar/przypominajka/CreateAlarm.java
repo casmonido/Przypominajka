@@ -22,13 +22,14 @@ public class CreateAlarm extends AppCompatActivity {
 
     private EditText tekst = null;
     private String fileName;
+    public static String paramFileName = "fileName";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle b = getIntent().getExtras();
         if(b != null)
-            fileName = b.getString("fileName");
+            fileName = b.getString(paramFileName);
         setContentView(R.layout.activity_create_alarm);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
