@@ -1,5 +1,6 @@
 package tkom.kkomar.przypominajka;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -16,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,48 +31,19 @@ public class ChooseAlarm extends AppCompatActivity {
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_choose_alarm);
-            Toolbar toolbar = findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
+            refreshActivity();
+            //prepareNotes();
+        }
 
-            FloatingActionButton fab = findViewById(R.id.fab);
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String newFile = addNewNote();
-                    Toast.makeText(getApplicationContext(), "Dodano plik " + newFile, Toast.LENGTH_LONG).show();
-//                    Intent myIntent = new Intent(ChooseAlarm.this, CreateAlarm.class);
-//                    Bundle b = new Bundle();
-//                    b.putString("filename", newFile); //Your id
-//                    myIntent.putExtras(b);
-//                    ChooseAlarm.this.startActivity(myIntent);
-                }
-            });
-
-            notesRecycler = findViewById(R.id.notes);
-
-            nAdapter = new NotesAdapter(notesList, new NotesAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(NotesBuilder nb) {
-                    Intent myIntent = new Intent(ChooseAlarm.this, CreateAlarm.class);
-                    Bundle b = new Bundle();
-                    b.putString("fileName", nb.getTitle()); //Your id
-                    myIntent.putExtras(b);
-                    ChooseAlarm.this.startActivity(myIntent);
-                }
-            });
-            RecyclerView.LayoutManager mLayoutManager =
-                    new LinearLayoutManager(getApplicationContext());
-            notesRecycler.setLayoutManager(mLayoutManager);
-            notesRecycler.setItemAnimator(new DefaultItemAnimator());
-            notesRecycler.setAdapter(nAdapter);
-            RecyclerView.ItemDecoration dividerItemDecoration =
-                    new DividerItemDecoration(this);
-            notesRecycler.addItemDecoration(dividerItemDecoration);
-            prepareNotes();
+        @Override
+        public void onRestart()
+        {
+            super.onRestart();
+            refreshActivity();
         }
 
         private void prepareNotes() {
+            notesList.clear();
             File directory;
             directory = getFilesDir();
             File[] files = directory.listFiles();
@@ -86,8 +59,18 @@ public class ChooseAlarm extends AppCompatActivity {
         {
             int num = getFilesDir().listFiles().length + 1;
             String theFile = "Note" + num + ".txt";
-            NotesBuilder note = new NotesBuilder(theFile, open(theFile));
-            notesList.add(note);
+//            NotesBuilder note = new NotesBuilder(theFile, "");
+//            File file = new File(getFilesDir(), theFile);
+            try {
+                OutputStreamWriter out =
+                        new OutputStreamWriter(openFileOutput(theFile, Context.MODE_PRIVATE));
+                out.write("");
+                out.close();
+                Toast.makeText(this, "Note '" + theFile + "' Saved!", Toast.LENGTH_SHORT).show();
+            } catch (Throwable t) {
+                Toast.makeText(this, "Exception: " + t.toString(), Toast.LENGTH_LONG).show();
+            }
+            prepareNotes();
             return theFile;
         }
 
@@ -109,5 +92,46 @@ public class ChooseAlarm extends AppCompatActivity {
                 Toast.makeText(this, "Exception: " + t.toString(), Toast.LENGTH_LONG).show();
             }
             return content;
+        }
+
+        private void refreshActivity()
+        {
+            setContentView(R.layout.activity_choose_alarm);
+            Toolbar toolbar = findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+
+            FloatingActionButton fab = findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String newFile = addNewNote();
+                    Toast.makeText(getApplicationContext(), "Dodano plik " + newFile, Toast.LENGTH_LONG).show();
+                    Intent myIntent = new Intent(ChooseAlarm.this, CreateAlarm.class);
+                    Bundle b = new Bundle(); //nullptr exception
+                    b.putString("filename", newFile);
+                    myIntent.putExtras(b);
+                    ChooseAlarm.this.startActivity(myIntent);
+                }
+            });
+            notesRecycler = findViewById(R.id.notes);
+            nAdapter = new NotesAdapter(notesList, new NotesAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(NotesBuilder nb) {
+                    Intent myIntent = new Intent(ChooseAlarm.this, CreateAlarm.class);
+                    Bundle b = new Bundle();
+                    b.putString("fileName", nb.getTitle());
+                    myIntent.putExtras(b);
+                    ChooseAlarm.this.startActivity(myIntent);
+                }
+            });
+            RecyclerView.LayoutManager mLayoutManager =
+                    new LinearLayoutManager(getApplicationContext());
+            notesRecycler.setLayoutManager(mLayoutManager);
+            notesRecycler.setItemAnimator(new DefaultItemAnimator());
+            notesRecycler.setAdapter(nAdapter);
+            RecyclerView.ItemDecoration dividerItemDecoration =
+                    new DividerItemDecoration(this);
+            notesRecycler.addItemDecoration(dividerItemDecoration);
+            prepareNotes();
         }
     }
