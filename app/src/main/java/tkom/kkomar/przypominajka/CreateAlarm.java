@@ -37,16 +37,16 @@ public class CreateAlarm extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                save(fileName);
+                save();
             }
         });
         tekst = findViewById(R.id.sourcefile);
-        tekst.setText(open(fileName));
+        tekst.setText(open());
     }
 
-    public String open(String fileName) {
+    public String open() {
         String content = "";
-        if (fileExists(fileName)) {
+        if (fileExists()) {
             try {
                 InputStream in = openFileInput(fileName);
                 if ( in != null) {
@@ -66,12 +66,12 @@ public class CreateAlarm extends AppCompatActivity {
         return content;
     }
 
-    public boolean fileExists(String fname){
-        File file = getBaseContext().getFileStreamPath(fname);
+    public boolean fileExists(){
+        File file = getBaseContext().getFileStreamPath(fileName);
         return file.exists();
     }
 
-    public void save(String fileName) {
+    public void save() {
         try {
             OutputStreamWriter out =
                     new OutputStreamWriter(openFileOutput(fileName, Context.MODE_PRIVATE));
