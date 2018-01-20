@@ -1,4 +1,4 @@
-package tkom.kkomar.przypominajka;
+package tkom.kkomar.przypominajka.android;
 
 public class NotesBuilder {
 

@@ -1,4 +1,4 @@
-package tkom.kkomar.przypominajka;
+package tkom.kkomar.przypominajka.android;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +9,9 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.List;
+
+import tkom.kkomar.przypominajka.Main;
+import tkom.kkomar.przypominajka.R;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> {
 
@@ -72,7 +75,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked == true)
                     {
-                        // uruchom przypominajkę
+                        if (Main.runParser(item.getTitle()) == 0);// uruchom przypominajkę
+                        {
+                            //
+                        }
                     }
                 }
             });

@@ -1,4 +1,4 @@
-package tkom.kkomar.przypominajka;
+package tkom.kkomar.przypominajka.android;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +17,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+
+import tkom.kkomar.przypominajka.R;
 
 public class CreateAlarm extends AppCompatActivity {
 

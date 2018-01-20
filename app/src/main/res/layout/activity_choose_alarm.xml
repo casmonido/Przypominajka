@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="tkom.kkomar.przypominajka.ChooseAlarm">
+    tools:context="tkom.kkomar.przypominajka.android.ChooseAlarm">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

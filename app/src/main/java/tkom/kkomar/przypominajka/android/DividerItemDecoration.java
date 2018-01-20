@@ -1,4 +1,4 @@
-package tkom.kkomar.przypominajka;
+package tkom.kkomar.przypominajka.android;
 
 
 import android.content.Context;

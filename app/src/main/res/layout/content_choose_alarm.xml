@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="tkom.kkomar.przypominajka.ChooseAlarm"
+    tools:context="tkom.kkomar.przypominajka.android.ChooseAlarm"
     tools:showIn="@layout/activity_choose_alarm">
 
     <android.support.v7.widget.RecyclerView
