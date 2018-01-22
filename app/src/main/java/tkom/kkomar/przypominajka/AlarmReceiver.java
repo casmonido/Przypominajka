@@ -6,11 +6,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.widget.Button;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
@@ -22,10 +20,12 @@ import tkom.kkomar.przypominajka.scanner.Source;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
-    private AlarmManager alarmMgr;
-    private PendingIntent alarmIntent;
+    public static String fileNameStr = "fileName";
+    public static String repeatEveryStr = "repeatEvery";
+    public static String startMillisStr = "startMillis";
 
     public void parseAndRun(String title, Context context) throws IOException {
+
         int repeatEvery = 0;
         InputStream file = context.openFileInput(title);
         if (file == null)
@@ -48,23 +48,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                     Toast.LENGTH_LONG).show();
             return;
         }
-        alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, AlarmReceiver.class);
-        Bundle b = new Bundle();
-        b.putString("fileName", title);
-        intent.putExtras(b);
-
-        alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-        // Set the alarm to start at 8:30 a.m.
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        Toast.makeText(context, "repeatEvery : " + repeatEvery,
-                Toast.LENGTH_LONG).show();
-//        calendar.set(Calendar.HOUR_OF_DAY, 8);
-//        calendar.set(Calendar.MINUTE, 30);
-
-        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                1000 * 60 * repeatEvery, alarmIntent);
+        setupAlarm(context, title, repeatEvery);
         file.close();
     }
 
@@ -73,9 +57,14 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String title = "";
         Parser parser = null;
+        int repeatEvery = 1;
+        long startMillis = 0;
         Bundle b = intent.getExtras();
-        if(b != null)
-            title = b.getString("fileName");
+        if(b != null) {
+            title = b.getString(fileNameStr);
+            repeatEvery = b.getInt(repeatEveryStr);
+            startMillis = b.getLong(startMillisStr);
+        }
         try (InputStream file = context.openFileInput(title)) {
             if (file == null)
                 return;
@@ -91,16 +80,43 @@ public class AlarmReceiver extends BroadcastReceiver {
         }
         Environment e = new Environment();
         try {
-           // parser.run(e);
             if (parser.run(e))
-                if (alarmMgr!= null)
-                    alarmMgr.cancel(alarmIntent);
+                cancelAlarm(context, title, repeatEvery, startMillis);
         } catch (tkom.kkomar.przypominajka.exceptions.RuntimeException re) {
             Toast.makeText(context, "Błąd wykonania: " + re.getMessage(),
                     Toast.LENGTH_LONG).show();
             System.out.println("Błąd wykonania: " + re.toString());
             re.printStackTrace();
         }
-        Toast.makeText(context, "HEHEHE alarm test receved", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "!!! alarm test receved", Toast.LENGTH_SHORT).show();
+    }
+
+    private void cancelAlarm(Context context, String filename, int repeatEvery, long startMillis)
+    {
+        AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        intent.putExtras(createBundle(filename, repeatEvery, startMillis));
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmMgr.cancel(alarmIntent);
+    }
+
+    private Bundle createBundle(String filename, int repeatEvery, long startMillis)
+    {
+        Bundle b = new Bundle();
+        b.putString(fileNameStr, filename);
+        b.putInt(repeatEveryStr, repeatEvery);
+        b.putLong(startMillisStr, startMillis);
+        return b;
+    }
+
+    private void setupAlarm(Context context, String filename, int repeatEvery)
+    {
+        AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        long startMillis = System.currentTimeMillis(); //
+        intent.putExtras(createBundle(filename, repeatEvery, startMillis));
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, startMillis,
+                1000 * 60 * repeatEvery, alarmIntent);
     }
 }
