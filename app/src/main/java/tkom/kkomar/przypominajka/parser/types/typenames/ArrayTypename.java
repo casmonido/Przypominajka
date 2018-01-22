@@ -1,11 +1,11 @@
-package tkom.kkomar.przypominajka.parser.types;
+package tkom.kkomar.przypominajka.parser.types.typenames;
 
 
-public class ArrayType implements Type {
+public class ArrayTypename implements Type {
 	
-	public static ArrayType type = new ArrayType();
+	public static ArrayTypename type = new ArrayTypename();
 	
-	private ArrayType() {}
+	private ArrayTypename() {}
 	
 	public String toString() {
 		return "[]";
@@ -17,7 +17,7 @@ public class ArrayType implements Type {
 	    if (obj == null) {
 	        return false;
 	    }
-	    if (obj instanceof ArrayType) {
+	    if (obj instanceof ArrayTypename) {
 	        return true;
 	    }
 	    return false;

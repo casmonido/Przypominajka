@@ -1,22 +1,22 @@
-package tkom.kkomar.przypominajka.parser.types;
+package tkom.kkomar.przypominajka.parser.types.builtin_classes;
 
-import java.util.Objects;
+import tkom.kkomar.przypominajka.exceptions.RuntimeException;
 
 public class Time {
-	int hour;
-	int min; //czasem -1
-	int sec;
+	Integer hour;
+	Integer min; //czasem -1
+	Integer sec;
 
-	public Time(int hour, int min, int sec) {
+	public Time(Integer hour, Integer min, Integer sec) {
 		this.hour = hour;
 		this.min = min;
 		this.sec = sec;
 	}
-	public Time(int hour, int min) {
+	public Time(Integer hour, Integer min) {
 		this.hour = hour;
 		this.min = min;
 	}
-	public Time(int hour) {
+	public Time(Integer hour) {
 		this.hour = hour;
 	}
 	
@@ -28,16 +28,16 @@ public class Time {
 	}
 
 	// this > other?
-	public boolean greaterThan(Object obj) {
+	public boolean greaterThan(Object obj) throws RuntimeException {
 		if (isSameType(obj))
 			return compare((Time) obj) == 1;
-		return false;
+		throw new RuntimeException("Porównanie między obiektami różnych typów!");
 	}
 
-	public boolean lessThan(Object obj) {
+	public boolean lessThan(Object obj) throws RuntimeException {
 		if (isSameType(obj))
 			return compare((Time) obj) == -1;
-		return false;
+		throw new RuntimeException("Porównanie między obiektami różnych typów!");
 	}
 
 	private boolean isSameType(Object obj)
@@ -58,9 +58,17 @@ public class Time {
 		if (this.hour < other.hour)
 			return -1;
 		//hour == hour
+		if (this.min == null || other.min == null) //nonimportant
+			return 0;
 		if (this.min > other.min)
 			return 1;
 		if (this.min < other.min)
+			return -1;
+		if (this.sec == null || other.sec == null) //nonimportant
+			return 0;
+		if (this.sec > other.sec)
+			return 1;
+		if (this.sec < other.sec)
 			return -1;
 		return 0;
 	}

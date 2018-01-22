@@ -3,10 +3,17 @@ package tkom.kkomar.przypominajka.interpreter.nodes;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 
+import tkom.kkomar.przypominajka.parser.types.builtin_classes.Datetime;
+import tkom.kkomar.przypominajka.parser.types.builtin_classes.Location;
+import tkom.kkomar.przypominajka.parser.types.builtin_classes.NetInfo;
+import tkom.kkomar.przypominajka.parser.types.builtin_classes.Time;
+import tkom.kkomar.przypominajka.parser.types.builtin_classes.Weather;
+import tkom.kkomar.przypominajka.parser.types.typenames.AtomTypename;
+import tkom.kkomar.przypominajka.parser.types.typenames.Type;
+import tkom.kkomar.przypominajka.parser.types.typenames.VoidTypename;
 import tkom.kkomar.przypominajka.scanner.Atom;
 import tkom.kkomar.przypominajka.interpreter.Environment;
 import tkom.kkomar.przypominajka.interpreter.TypedValue;
-import tkom.kkomar.przypominajka.parser.types.*;
 import tkom.kkomar.przypominajka.exceptions.RuntimeException;
 
 public class VariableNode implements Node {
@@ -38,7 +45,7 @@ public class VariableNode implements Node {
 			Field f = null;
 			try {
 				if (obj.getClass().isArray() && "length".equals(attrib))
-					return new TypedValue(new Long(Array.getLength(obj)), new AtomType(Atom.typeInt));
+					return new TypedValue(new Long(Array.getLength(obj)), new AtomTypename(Atom.typeInt));
 				f = obj.getClass().getDeclaredField(attrib);
 			} catch (NoSuchFieldException e) {
 				throw new RuntimeException("Atrybut nie występuje w obiekcie");
@@ -47,7 +54,7 @@ public class VariableNode implements Node {
 			try {
 				obj = f.get(obj);
 				Atom at = getAtomType(obj);
-				typ = ((at==null) ? VoidType.type : new AtomType(at));
+				typ = ((at==null) ? VoidTypename.type : new AtomTypename(at));
 			} catch (IllegalAccessException e) {
 				// nie powinno sie zdarzyc
 				e.printStackTrace();
@@ -66,15 +73,15 @@ public class VariableNode implements Node {
 			return Atom.typeString;
 		if (value instanceof Boolean) 
 			return Atom.typeBool;
-		if (value instanceof Time) 
+		if (value instanceof Time)
 			return Atom.typeTime;
-		if (value instanceof Datetime) 
+		if (value instanceof Datetime)
 			return Atom.typeDatetime;
-		if (value instanceof Location) 
+		if (value instanceof Location)
 			return Atom.typeLocation;
-		if (value instanceof Weather) 
+		if (value instanceof Weather)
 			return Atom.typeWeather;
-		if (value instanceof NetInfo) 
+		if (value instanceof NetInfo)
 			return Atom.typeNetInfo;
 		return null;
 	}

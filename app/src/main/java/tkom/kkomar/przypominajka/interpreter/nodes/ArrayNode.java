@@ -4,7 +4,7 @@ import java.util.List;
 
 import tkom.kkomar.przypominajka.interpreter.Environment;
 import tkom.kkomar.przypominajka.interpreter.TypedValue;
-import tkom.kkomar.przypominajka.parser.types.ArrayType;
+import tkom.kkomar.przypominajka.parser.types.typenames.ArrayTypename;
 
 
 public class ArrayNode implements Node {
@@ -21,7 +21,7 @@ public class ArrayNode implements Node {
 	
 	@Override
 	public TypedValue evalNode(Environment env) {
-		return new TypedValue(value, ArrayType.type);
+		return new TypedValue(value, ArrayTypename.type);
 	}
 
 }

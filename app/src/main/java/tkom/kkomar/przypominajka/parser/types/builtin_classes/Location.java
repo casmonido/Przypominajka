@@ -1,4 +1,4 @@
-package tkom.kkomar.przypominajka.parser.types;
+package tkom.kkomar.przypominajka.parser.types.builtin_classes;
 
 public class Location {
 	String houseNumber;

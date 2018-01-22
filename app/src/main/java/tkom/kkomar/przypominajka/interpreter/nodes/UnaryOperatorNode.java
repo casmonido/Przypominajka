@@ -1,6 +1,6 @@
 package tkom.kkomar.przypominajka.interpreter.nodes;
 
-import tkom.kkomar.przypominajka.parser.types.AtomType;
+import tkom.kkomar.przypominajka.parser.types.typenames.AtomTypename;
 import tkom.kkomar.przypominajka.scanner.Atom;
 import tkom.kkomar.przypominajka.interpreter.Environment;
 import tkom.kkomar.przypominajka.interpreter.TypedValue;
@@ -19,17 +19,17 @@ public abstract class UnaryOperatorNode implements Node {
 		TypedValue l = var.evalNode(env);
 		if (l == null)
 			throw new RuntimeException("Zmienna " + ((IdentNode)var.ident).ident + " nie została zainicjalizowana!");
-		if (!(l.getType() instanceof AtomType))
+		if (!(l.getType() instanceof AtomTypename))
 			throw new RuntimeException("Próba zastosowania operatora " + getOperator() +
 					" do obiektów typu " + l.getType().toString());
-		switch (((AtomType)l.getType()).getAtom()) {
+		switch (((AtomTypename)l.getType()).getAtom()) {
 		case typeInt:
 			env.bind(((IdentNode)var.ident).ident, 
-					new TypedValue(immediateEvalInt((Integer)l.getValue()), new AtomType(Atom.typeInt)));
+					new TypedValue(immediateEvalInt((Integer)l.getValue()), new AtomTypename(Atom.typeInt)));
 			return var.evalNode(env);
 		case typeDouble:
 			env.bind(((IdentNode)var.ident).ident, 
-					new TypedValue(immediateEvalDouble((Double)l.getValue()), new AtomType(Atom.typeDouble)));
+					new TypedValue(immediateEvalDouble((Double)l.getValue()), new AtomTypename(Atom.typeDouble)));
 			return var.evalNode(env);
 		default:
 			throw new RuntimeException("Próba zastosowania operatora " + getOperator() +

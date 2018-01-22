@@ -1,4 +1,4 @@
-package tkom.kkomar.przypominajka.parser.types;
+package tkom.kkomar.przypominajka.parser.types.typenames;
 
 public interface Type {
 

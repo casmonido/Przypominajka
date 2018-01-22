@@ -3,6 +3,7 @@ package tkom.kkomar.przypominajka.android;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -28,10 +29,12 @@ public class ChooseAlarm extends AppCompatActivity {
         private List <NotesBuilder> notesList = new LinkedList<> ();
         private NotesAdapter nAdapter;
         private RecyclerView notesRecycler;
+        public static Vibrator mVibrator;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            mVibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
             setContentView(R.layout.activity_choose_alarm);
             Toolbar toolbar = findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);

@@ -10,17 +10,17 @@ import java.util.Map;
 
 import tkom.kkomar.przypominajka.ErrorTracker;
 import tkom.kkomar.przypominajka.exceptions.*;
+import tkom.kkomar.przypominajka.exceptions.RuntimeException;
 import tkom.kkomar.przypominajka.interpreter.Environment;
 import tkom.kkomar.przypominajka.interpreter.TypedIdent;
 import tkom.kkomar.przypominajka.interpreter.builtin_functions.GetCurrentTime;
 import tkom.kkomar.przypominajka.interpreter.nodes.IdentNode;
 import tkom.kkomar.przypominajka.interpreter.nodes.Node;
 import tkom.kkomar.przypominajka.interpreter.nodes.StartNode;
-import tkom.kkomar.przypominajka.parser.types.ArrayType;
-import tkom.kkomar.przypominajka.parser.types.AtomType;
-import tkom.kkomar.przypominajka.parser.types.Datetime;
-import tkom.kkomar.przypominajka.parser.types.Time;
-import tkom.kkomar.przypominajka.parser.types.Type;
+import tkom.kkomar.przypominajka.parser.types.typenames.ArrayTypename;
+import tkom.kkomar.przypominajka.parser.types.typenames.AtomTypename;
+import tkom.kkomar.przypominajka.parser.types.builtin_classes.Time;
+import tkom.kkomar.przypominajka.parser.types.typenames.Type;
 import tkom.kkomar.przypominajka.scanner.Atom;
 import tkom.kkomar.przypominajka.scanner.ScanInterface;
 import tkom.kkomar.przypominajka.scanner.tokens.Token;
@@ -41,7 +41,8 @@ public class Parser {
 		functions.put("getCurrentTime", new GetCurrentTime());
 		functions.put("getWeatherForecast", new GetWeatherForecast());
 		functions.put("switchOnAlarm", new GetCurrentTime());
-		functions.put("sleep", new GetWeatherForecast());
+		functions.put("sleep", new Sleep());
+		functions.put("vibrate", new Vibrate());
 		functions.put("getBirthdaysToday", new GetBirthdaysToday());
 		functions.put("sendSMS", new SendSMS());
 		functions.put("getCurrentDate", new GetCurrentDate());
@@ -220,11 +221,11 @@ public class Parser {
 	private Type parseType() throws ParseException {
 		if (maybe(Atom.lBracket)) {
 			accept(Atom.rBracket);
-			return ArrayType.type;
+			return ArrayTypename.type;
 		}
 		Token typ = typeName();
 		if (typ != null)
-			return new AtomType(typ.getAtom());
+			return new AtomTypename(typ.getAtom());
 		return null;
 	}
 	
@@ -375,8 +376,11 @@ public class Parser {
 			nextToken();
 		}
 		else throw new ParseException("Brak parametru w anotacji @start");
-		if (startAt.greaterThan(new Time(h, min)))
-			startAt = new Time(h, min);
+		try {
+			if (startAt.greaterThan(new Time(h, min)))
+				startAt = new Time(h, min);
+		} catch (RuntimeException re) {  //startAt stays the same
+		}
 		accept(Atom.rParent);
 		return true;
 	}

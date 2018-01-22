@@ -6,7 +6,7 @@ import java.util.List;
 import tkom.kkomar.przypominajka.interpreter.Environment;
 import tkom.kkomar.przypominajka.interpreter.TypedIdent;
 import tkom.kkomar.przypominajka.interpreter.TypedValue;
-import tkom.kkomar.przypominajka.parser.types.Type;
+import tkom.kkomar.przypominajka.parser.types.typenames.Type;
 import tkom.kkomar.przypominajka.exceptions.RuntimeException;
 
 public class FunctionDefNode implements Node {

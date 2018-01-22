@@ -1,7 +1,7 @@
 package tkom.kkomar.przypominajka.interpreter;
 
 
-import tkom.kkomar.przypominajka.parser.types.Type;
+import tkom.kkomar.przypominajka.parser.types.typenames.Type;
 
 public class TypedIdent {
 

@@ -1,9 +1,9 @@
-package tkom.kkomar.przypominajka.parser.types;
+package tkom.kkomar.przypominajka.parser.types.typenames;
 
 import tkom.kkomar.przypominajka.scanner.Atom;
 
-public class AtomType implements Type {
-	public AtomType(Atom n) {
+public class AtomTypename implements Type {
+	public AtomTypename(Atom n) {
 		nameId = n;
 	}
 	private Atom nameId;
@@ -47,10 +47,10 @@ public class AtomType implements Type {
 	    if (obj == null) {
 	        return false;
 	    }
-	    if (!AtomType.class.isAssignableFrom(obj.getClass())) {
+	    if (!AtomTypename.class.isAssignableFrom(obj.getClass())) {
 	        return false;
 	    }
-	    final AtomType other = (AtomType) obj;
+	    final AtomTypename other = (AtomTypename) obj;
 	    if ((this.nameId == null) ? (other.nameId != null) : !this.nameId.equals(other.nameId)) {
 	        return false;
 	    }

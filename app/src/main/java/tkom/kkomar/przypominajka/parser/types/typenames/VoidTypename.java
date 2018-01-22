@@ -1,11 +1,11 @@
-package tkom.kkomar.przypominajka.parser.types;
+package tkom.kkomar.przypominajka.parser.types.typenames;
 
 
-public class VoidType implements Type {
+public class VoidTypename implements Type {
 	
-	public static VoidType type = new VoidType();
+	public static VoidTypename type = new VoidTypename();
 	
-	private VoidType() {}
+	private VoidTypename() {}
 	
 	public String toString() {
 		return "void";
@@ -16,7 +16,7 @@ public class VoidType implements Type {
 	    if (obj == null) {
 	        return false;
 	    }
-	    if (obj instanceof VoidType) {
+	    if (obj instanceof VoidTypename) {
 	        return true;
 	    }
 	    return false;

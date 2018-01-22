@@ -1,6 +1,6 @@
 package tkom.kkomar.przypominajka.interpreter.nodes;
 
-import tkom.kkomar.przypominajka.parser.types.AtomType;
+import tkom.kkomar.przypominajka.parser.types.typenames.AtomTypename;
 import tkom.kkomar.przypominajka.scanner.Atom;
 import tkom.kkomar.przypominajka.interpreter.Environment;
 import tkom.kkomar.przypominajka.interpreter.TypedValue;
@@ -17,7 +17,7 @@ public class CastNode implements Node {
 
 	@Override
 	public TypedValue evalNode(Environment env) throws RuntimeException { // jak rzutowac??
-		return new TypedValue(right.evalNode(env).getValue(), new AtomType(typ));
+		return new TypedValue(right.evalNode(env).getValue(), new AtomTypename(typ));
 		//xlsl
 	}
 }

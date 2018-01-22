@@ -1,6 +1,6 @@
 package tkom.kkomar.przypominajka.interpreter.nodes;
 
-import tkom.kkomar.przypominajka.parser.types.AtomType;
+import tkom.kkomar.przypominajka.parser.types.typenames.AtomTypename;
 import tkom.kkomar.przypominajka.scanner.Atom;
 import tkom.kkomar.przypominajka.interpreter.Environment;
 import tkom.kkomar.przypominajka.interpreter.TypedValue;
@@ -19,7 +19,7 @@ public class BoolAndNode implements Node {
 	@Override
 	public TypedValue evalNode(Environment env) throws RuntimeException {
 		return new TypedValue(((boolean) left.evalNode(env).getValue()) &&
-				((boolean) right.evalNode(env).getValue()), new AtomType(Atom.typeBool));
+				((boolean) right.evalNode(env).getValue()), new AtomTypename(Atom.typeBool));
 	}
 
 }

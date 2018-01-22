@@ -1,6 +1,6 @@
 package tkom.kkomar.przypominajka.interpreter.nodes;
 
-import tkom.kkomar.przypominajka.parser.types.AtomType;
+import tkom.kkomar.przypominajka.parser.types.typenames.AtomTypename;
 import tkom.kkomar.przypominajka.scanner.Atom;
 import tkom.kkomar.przypominajka.interpreter.Environment;
 import tkom.kkomar.przypominajka.interpreter.TypedValue;
@@ -24,19 +24,19 @@ public abstract class ComparisonNode implements Node {
 			throw new RuntimeException("Próba zastosowania operatora " + getOperator() +
 					" między obiektami różnych typów: " +
 					l.getType().toString() + " i " + r.getType().toString());
-		if (!(l.getType() instanceof AtomType))
+		if (!(l.getType() instanceof AtomTypename))
 			throw new RuntimeException("Próba zastosowania operatora " + getOperator() +
 					" do obiektów typu " + l.getType().toString());
-		switch (((AtomType)l.getType()).getAtom()) {
+		switch (((AtomTypename)l.getType()).getAtom()) {
 		case typeInt:
 			return new TypedValue(
 					immediateCompareInt((Integer)l.getValue(), (Integer)r.getValue()),
-					new AtomType(Atom.typeBool));
+					new AtomTypename(Atom.typeBool));
 		case typeDouble:
 			if (l.getValue() instanceof Double)
 				return new TypedValue(
 						immediateCompareDouble((Double) l.getValue(), (Double) r.getValue()), 
-						new AtomType(Atom.typeBool));
+						new AtomTypename(Atom.typeBool));
 		default:
 			throw new RuntimeException("Próba zastosowania operatora " + getOperator() +
 					" do obiektów typu " + l.getType().toString());

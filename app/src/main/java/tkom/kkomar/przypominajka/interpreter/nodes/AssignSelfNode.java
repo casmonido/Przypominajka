@@ -1,6 +1,6 @@
 package tkom.kkomar.przypominajka.interpreter.nodes;
 
-import tkom.kkomar.przypominajka.parser.types.AtomType;
+import tkom.kkomar.przypominajka.parser.types.typenames.AtomTypename;
 import tkom.kkomar.przypominajka.scanner.Atom;
 import tkom.kkomar.przypominajka.interpreter.Environment;
 import tkom.kkomar.przypominajka.interpreter.TypedValue;
@@ -25,25 +25,25 @@ public abstract class AssignSelfNode implements Node {
 		if (value.getType().equals(existing.getType()))
 			throw new RuntimeException("Próba zastosowania operatora " + getOperator() + " między obiektami różnych typów: " +
 					value.getType().toString() + " i " + existing.getType().toString());
-		if (!(value.getType() instanceof AtomType))
+		if (!(value.getType() instanceof AtomTypename))
 			throw new RuntimeException("Próba zastosowania operatora " + getOperator() +
 					" do obiektów typu " + value.getType().toString());
 		TypedValue newVal = null;
-		switch (((AtomType)value.getType()).getAtom()) {
+		switch (((AtomTypename)value.getType()).getAtom()) {
 		case typeInt:
 			newVal = new TypedValue(
 						immediateEvalInt((Integer) value.getValue(), (Integer) existing.getValue()), 
-						new AtomType(Atom.typeInt));
+						new AtomTypename(Atom.typeInt));
 			break;
 		case typeDouble:
 			newVal = new TypedValue(
 						immediateEvalDouble((Double) value.getValue(), (Double) existing.getValue()),
-						new AtomType(Atom.typeDouble));
+						new AtomTypename(Atom.typeDouble));
 			break;
 		case typeString:
 			newVal = new TypedValue(
 						immediateEvalString((String) value.getValue(), (String) existing.getValue()),
-						new AtomType(Atom.typeString));
+						new AtomTypename(Atom.typeString));
 			break;
 		default:
 			throw new RuntimeException("Próba zastosowania operatora " + getOperator() + " do obiektów typu " +

@@ -1,6 +1,6 @@
 package tkom.kkomar.przypominajka.interpreter.nodes;
 
-import tkom.kkomar.przypominajka.parser.types.AtomType;
+import tkom.kkomar.przypominajka.parser.types.typenames.AtomTypename;
 import tkom.kkomar.przypominajka.scanner.Atom;
 import tkom.kkomar.przypominajka.interpreter.Environment;
 import tkom.kkomar.przypominajka.interpreter.TypedValue;
@@ -24,24 +24,24 @@ public abstract class ArythmeticNode implements Node {
 			throw new RuntimeException("Próba zastosowania operatora " + getOperator() +
 					" między obiektami różnych typów: " +
 					l.getType().toString() + " i " + r.getType().toString());
-		if (!(l.getType() instanceof AtomType))
+		if (!(l.getType() instanceof AtomTypename))
 			throw new RuntimeException("Próba zastosowania operatora " + getOperator() +
 					" do obiektów typu " + l.getType().toString());
-		switch (((AtomType)l.getType()).getAtom()) {
+		switch (((AtomTypename)l.getType()).getAtom()) {
 		case typeInt:
 			return new TypedValue(
 					immediateEvalInt((Integer)l.getValue(), (Integer)r.getValue()),
-					new AtomType(Atom.typeInt));
+					new AtomTypename(Atom.typeInt));
 		case typeDouble:
 			if (l.getValue() instanceof Double)
 				return new TypedValue(
 						immediateEvalDouble((Double) l.getValue(), (Double) r.getValue()), 
-						new AtomType(Atom.typeDouble));
+						new AtomTypename(Atom.typeDouble));
 		case typeString:
 			if (l.getValue() instanceof String)
 				return new TypedValue(
 						immediateEvalString((String) l.getValue(), (String) r.getValue()), 
-						new AtomType(Atom.typeString));
+						new AtomTypename(Atom.typeString));
 		default:
 			throw new RuntimeException("Próba zastosowania operatora " + getOperator() +
 					" do obiektów typu " + l.getType().toString());
