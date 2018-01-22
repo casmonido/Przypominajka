@@ -1,5 +1,7 @@
 package tkom.kkomar.przypominajka.parser;
 
+import java.math.BigInteger;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,6 +18,8 @@ import tkom.kkomar.przypominajka.interpreter.nodes.Node;
 import tkom.kkomar.przypominajka.interpreter.nodes.StartNode;
 import tkom.kkomar.przypominajka.parser.types.ArrayType;
 import tkom.kkomar.przypominajka.parser.types.AtomType;
+import tkom.kkomar.przypominajka.parser.types.Datetime;
+import tkom.kkomar.przypominajka.parser.types.Time;
 import tkom.kkomar.przypominajka.parser.types.Type;
 import tkom.kkomar.przypominajka.scanner.Atom;
 import tkom.kkomar.przypominajka.scanner.ScanInterface;
@@ -30,7 +34,9 @@ public class Parser {
 	private ErrorTracker bin;
 	private Token next = null;
 	private Map<String,Node> functions = new HashMap<String,Node>();
-	
+	private BigInteger howOftenToCheck = BigInteger.valueOf(0);
+	private Time startAt;
+
 	private void initFunctions() {
 		functions.put("getCurrentTime", new GetCurrentTime());
 		functions.put("getWeatherForecast", new GetWeatherForecast());
@@ -46,6 +52,8 @@ public class Parser {
 	}
 	
 	public Parser(ScanInterface sc, ErrorTracker et) {
+		Calendar cal = Calendar.getInstance();
+		startAt = new Time(cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE));
 		scan = sc;
 		currToken = scan.nextToken();
 		bin = et;
@@ -96,7 +104,7 @@ public class Parser {
 	}
 	
 	//[<include>] [<funcDef>*] [<assignExp>*] ‘When’ <boolExp> ‘do’ <voidExp>+ ‘.’
-	public void start() {
+	public int start() {
 		//[<funcDef>*] 
 		parseIncludeInstruction();
 		initFunctions();
@@ -151,6 +159,7 @@ public class Parser {
 			bin.parseError(pe.getMessage());
 		}
 		root = new StartNode(assignNodes, condition, list);
+		return howOftenToCheck.intValue();
 	}
 	
 	private List<Node> parseList() throws ParseException {
@@ -189,8 +198,9 @@ public class Parser {
 		return attrs;
 	}
 
-	public void run(Environment env) throws tkom.kkomar.przypominajka.exceptions.RuntimeException {
-        root.evalNode(env);
+	public boolean run(Environment env) throws tkom.kkomar.przypominajka.exceptions.RuntimeException {
+		root.evalNode(env);
+		return root.hasPassed();
 	}
 	
 	//'include' <fileName>
@@ -336,8 +346,15 @@ public class Parser {
 //	<everyAnno> ::= <everyKw> ‘(‘ <intLit> ‘)’
 	private boolean everyAnno() throws ParseException {
 		accept(Atom.lParent);
-		if (currToken.getAtom() == Atom.intConst) 
+		if (currToken.getAtom() == Atom.intConst) {
+			if (howOftenToCheck.equals(BigInteger.valueOf(0)))
+				howOftenToCheck = new BigInteger(""+currToken.getValue());
+			else
+				howOftenToCheck = howOftenToCheck.gcd(
+						new BigInteger(""+currToken.getValue())
+				);
 			nextToken();
+		}
 		else throw new ParseException("Brak parametru w anotacji @every");
 		accept(Atom.rParent);
 		return true;
@@ -346,15 +363,20 @@ public class Parser {
 //	<startAnno> ::= <startKw>‘(‘ <intLit>, <intLit>, <intLit>, <intLit> ‘)’	
 	private boolean startAnno() throws ParseException {
 		accept(Atom.lParent);
-		for (int i = 0; i < 3; i++) {
-			if (currToken.getAtom() == Atom.intConst) 
-				nextToken();
-			else throw new ParseException("Brak parametru w anotacji @start");
-			accept(Atom.commaOp);
-		}
-		if (currToken.getAtom() == Atom.intConst) 
+		Integer h, min;
+		if (currToken.getAtom() == Atom.intConst) {
+			h = (Integer) currToken.getValue();
 			nextToken();
+		}
 		else throw new ParseException("Brak parametru w anotacji @start");
+		accept(Atom.commaOp);
+		if (currToken.getAtom() == Atom.intConst) {
+			min = (Integer) currToken.getValue();
+			nextToken();
+		}
+		else throw new ParseException("Brak parametru w anotacji @start");
+		if (startAt.greaterThan(new Time(h, min)))
+			startAt = new Time(h, min);
 		accept(Atom.rParent);
 		return true;
 	}

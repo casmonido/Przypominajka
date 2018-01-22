@@ -12,7 +12,7 @@ import android.widget.Toast;
 import java.io.InputStream;
 import java.util.List;
 
-import tkom.kkomar.przypominajka.Main;
+import tkom.kkomar.przypominajka.AlarmReceiver;
 import tkom.kkomar.przypominajka.R;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> {
@@ -80,11 +80,8 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
                     if (isChecked == true)
                     {
                         try {
-                            InputStream in = parent.getContext().openFileInput(item.getTitle());
-                            if (in != null) {
-                                Main.parseAndRun(in, parent.getContext());
-                                in.close();
-                            }
+                            AlarmReceiver main = new AlarmReceiver();
+                            main.parseAndRun(item.getTitle(), parent.getContext());
                         } catch (java.io.FileNotFoundException e) {} catch (Throwable t) {
                             Toast.makeText(parent.getContext(), "Exception: " + t.toString(), Toast.LENGTH_LONG).show();
                         }

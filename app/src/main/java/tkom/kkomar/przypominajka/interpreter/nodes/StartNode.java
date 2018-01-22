@@ -10,6 +10,7 @@ public class StartNode implements Node {
 	public List<Node> earlyAssign;
 	public Node left;
 	public List<Node> right;
+	private boolean hasPassed = false;
 	
 	public StartNode(List<Node> asgn, Node l, List<Node> r) {
 		left = l;
@@ -17,12 +18,16 @@ public class StartNode implements Node {
 		earlyAssign = asgn;
 	}
 
+	public boolean hasPassed()
+	{
+		return hasPassed;
+	}
 	
 	@Override
 	public TypedValue evalNode(Environment env) throws RuntimeException {
 		for (Node r : earlyAssign)
 			r.evalNode(env);
-		if ((boolean)left.evalNode(env).getValue() == true)
+		if ((hasPassed = (boolean)left.evalNode(env).getValue()) == true)
 			for (Node r : right)
 				r.evalNode(env);
 		return null;

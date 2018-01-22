@@ -13,7 +13,7 @@ public class GetCurrentDate implements Node {
 	@Override
 	public TypedValue evalNode(Environment env) throws RuntimeException {
 		return new TypedValue(new Datetime(
-				new Long(2), new Long(10), new Long(2018)), new AtomType(Atom.typeDatetime));
+				new Integer(2), new Integer(10), new Integer(2018)), new AtomType(Atom.typeDatetime));
 	}
 
 

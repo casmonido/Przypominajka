@@ -1,38 +1,68 @@
 package tkom.kkomar.przypominajka.parser.types;
 
-public class Time {
-	Long hour;
-	Long min; //czasem -1
-	Long sec;
+import java.util.Objects;
 
-	public Time(Long hour, Long min, Long sec) {
+public class Time {
+	int hour;
+	int min; //czasem -1
+	int sec;
+
+	public Time(int hour, int min, int sec) {
 		this.hour = hour;
 		this.min = min;
 		this.sec = sec;
 	}
-	
-	public Time(Long hour, Long min) {
+	public Time(int hour, int min) {
 		this.hour = hour;
 		this.min = min;
 	}
-	
-	public Time(Long hour) {
+	public Time(int hour) {
 		this.hour = hour;
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
-	    if (obj == null) {
-	        return false;
-	    }
-	    if (!Time.class.isAssignableFrom(obj.getClass())) {
-	        return false;
-	    }
-	    final Time other = (Time) obj;
-	    if (this.hour == other.hour && this.min == other.min &&
-	    		this.sec == other.sec) 
-	        return false;
-	    return true;
+		if (isSameType(obj))
+			return compare((Time) obj) == 0;
+		return false;
+	}
+
+	// this > other?
+	public boolean greaterThan(Object obj) {
+		if (isSameType(obj))
+			return compare((Time) obj) == 1;
+		return false;
+	}
+
+	public boolean lessThan(Object obj) {
+		if (isSameType(obj))
+			return compare((Time) obj) == -1;
+		return false;
+	}
+
+	private boolean isSameType(Object obj)
+	{
+		if (obj == null) {
+			return false;
+		}
+		if (!Time.class.isAssignableFrom(obj.getClass())) {
+			return false;
+		}
+		return true;
+	}
+
+	private int compare(Time other)
+	{
+		if (this.hour > other.hour)
+			return 1;
+		if (this.hour < other.hour)
+			return -1;
+		//hour == hour
+		if (this.min > other.min)
+			return 1;
+		if (this.min < other.min)
+			return -1;
+		return 0;
 	}
 
 	@Override

@@ -27,31 +27,31 @@ public class ConstrNode implements Node {
 //			datetime(int day, int month, int year, int hour, int min)
 			if (args.size() == 3)
 				return new TypedValue(new Datetime(
-						(Long)args.get(0).evalNode(env).getValue(),
-						(Long)args.get(1).evalNode(env).getValue(),
-						(Long)args.get(2).evalNode(env).getValue()),
+						(Integer)args.get(0).evalNode(env).getValue(),
+						(Integer)args.get(1).evalNode(env).getValue(),
+						(Integer)args.get(2).evalNode(env).getValue()),
 						new AtomType(type));
 			if (args.size() == 4 && args.get(3) instanceof Time)
 				return new TypedValue(new Datetime(
-						(Long)args.get(0).evalNode(env).getValue(),
-						(Long)args.get(1).evalNode(env).getValue(),
-						(Long)args.get(2).evalNode(env).getValue(),
+						(Integer)args.get(0).evalNode(env).getValue(),
+						(Integer)args.get(1).evalNode(env).getValue(),
+						(Integer)args.get(2).evalNode(env).getValue(),
 						(Time)args.get(3).evalNode(env).getValue()),
 						new AtomType(type));
 			if (args.size() == 4)
 				return new TypedValue(new Datetime(
-						(Long)args.get(0).evalNode(env).getValue(), 
-						(Long)args.get(1).evalNode(env).getValue(), 
-						(Long)args.get(2).evalNode(env).getValue(),
-						(Long)args.get(3).evalNode(env).getValue()),
+						(Integer)args.get(0).evalNode(env).getValue(), 
+						(Integer)args.get(1).evalNode(env).getValue(), 
+						(Integer)args.get(2).evalNode(env).getValue(),
+						(Integer)args.get(3).evalNode(env).getValue()),
 						new AtomType(type));
 			if (args.size() == 5)
 				return new TypedValue(new Datetime(
-						(Long)args.get(0).evalNode(env).getValue(), 
-						(Long)args.get(1).evalNode(env).getValue(), 
-						(Long)args.get(2).evalNode(env).getValue(),
-						(Long)args.get(3).evalNode(env).getValue(),
-						(Long)args.get(4).evalNode(env).getValue()),
+						(Integer)args.get(0).evalNode(env).getValue(), 
+						(Integer)args.get(1).evalNode(env).getValue(), 
+						(Integer)args.get(2).evalNode(env).getValue(),
+						(Integer)args.get(3).evalNode(env).getValue(),
+						(Integer)args.get(4).evalNode(env).getValue()),
 						new AtomType(type));
 		case typeLocation:
 			return new TypedValue(new Location(
@@ -64,17 +64,17 @@ public class ConstrNode implements Node {
 		case typeTime:
 			if (args.size() == 1)
 				return new TypedValue(new Time(
-						(Long)args.get(0).evalNode(env).getValue()),
+						(Integer)args.get(0).evalNode(env).getValue()),
 						new AtomType(type));
 			if (args.size() == 2)
 				return new TypedValue(new Time(
-						(Long)args.get(0).evalNode(env).getValue(), 
-						(Long)args.get(1).evalNode(env).getValue()),
+						(Integer)args.get(0).evalNode(env).getValue(), 
+						(Integer)args.get(1).evalNode(env).getValue()),
 						new AtomType(type));
 			return new TypedValue(new Time(
-					(Long)args.get(0).evalNode(env).getValue(), 
-					(Long)args.get(1).evalNode(env).getValue(), 
-					(Long)args.get(2).evalNode(env).getValue()),
+					(Integer)args.get(0).evalNode(env).getValue(), 
+					(Integer)args.get(1).evalNode(env).getValue(), 
+					(Integer)args.get(2).evalNode(env).getValue()),
 					new AtomType(type));
 		default:
 			return null;

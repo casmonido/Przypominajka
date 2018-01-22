@@ -1,22 +1,22 @@
 package tkom.kkomar.przypominajka.parser.types;
 
 public class Datetime {
-	Long year;
-	Long month;
-	Long day;
-	Long hour;
-	Long min;
-	Long sec;
+	int year;
+	int month;
+	int day;
+	int hour;
+	int min;
+	int sec;
 	private int importantPart;
 	
-	public Datetime(Long day, Long month, Long year) {
+	public Datetime(int day, int month, int year) {
 		this.day = day;
 		this.month = month;
 		this.year = year;
 		importantPart = 3;
 	}
 	
-	public Datetime(Long day, Long month, Long year, Time t) {
+	public Datetime(int day, int month, int year, Time t) {
 		this.day = day;
 		this.month = month;
 		this.year = year;
@@ -26,7 +26,7 @@ public class Datetime {
 		importantPart = 6;
 	}
 	
-	public Datetime(Long day, Long month, Long year, Long hour) {
+	public Datetime(int day, int month, int year, int hour) {
 		this.day = day;
 		this.month = month;
 		this.year = year;
@@ -34,7 +34,7 @@ public class Datetime {
 		importantPart = 4;
 	}
 	
-	public Datetime(Long day, Long month, Long year, Long hour, Long min) {
+	public Datetime(int day, int month, int year, int hour, int min) {
 		this.day = day;
 		this.month = month;
 		this.year = year;
