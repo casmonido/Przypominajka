@@ -150,7 +150,7 @@ public class Scan implements ScanInterface {
 		case '/': 
 			nextChar();
 			return new BasicToken(Atom.divOp, atomStart);
-		case '.': 
+		case '.':
 			nextChar();
 			return new BasicToken(Atom.dotOp, atomStart);
 		case ',': 

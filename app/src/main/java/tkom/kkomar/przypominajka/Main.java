@@ -33,7 +33,14 @@ public class Main {
             return 1;
         }
         Environment e = new Environment();
-        parser.run(e);
+        try {
+            parser.run(e);
+        } catch (tkom.kkomar.przypominajka.exceptions.RuntimeException re) {
+            Toast.makeText(context, "Błąd wykonania: " + re.getMessage(),
+                    Toast.LENGTH_LONG).show();
+            re.printStackTrace();
+            return 1;
+        }
         return 0;
     }
 

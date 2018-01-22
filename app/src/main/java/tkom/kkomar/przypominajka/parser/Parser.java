@@ -135,18 +135,18 @@ public class Parser {
 		try {
 			accept(Atom.doKw);
 		} catch (ParseException pe) {
-			skipTo(new Atom [] {Atom.dotOp});
+			//skipTo(new Atom [] {Atom.dotOp});
 			bin.parseError(pe.getMessage());
 		}
 		List<Node> list = null;
 		try {
 			list = parseInstructionList();
 		} catch (ParseException pe) {
-			skipTo(new Atom [] {Atom.dotOp});
+			//skipTo(new Atom [] {Atom.dotOp});
 			bin.parseError(pe.getMessage());
 		}
 		try {
-			accept(Atom.dotOp);
+			accept(Atom.eof);
 		} catch (ParseException pe) {
 			bin.parseError(pe.getMessage());
 		}
@@ -189,13 +189,8 @@ public class Parser {
 		return attrs;
 	}
 
-	public void run(Environment env) {
-		try {
-			root.evalNode(env);
-		} catch (tkom.kkomar.przypominajka.exceptions.RuntimeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void run(Environment env) throws tkom.kkomar.przypominajka.exceptions.RuntimeException {
+        root.evalNode(env);
 	}
 	
 	//'include' <fileName>
