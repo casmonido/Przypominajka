@@ -1,6 +1,10 @@
 package tkom.kkomar.przypominajka;
 
+import android.content.Context;
+import android.widget.Toast;
+
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
 import tkom.kkomar.przypominajka.scanner.Scan;
@@ -11,24 +15,26 @@ import tkom.kkomar.przypominajka.interpreter.Environment;
 
 public class Main {
 
-    public static int runParser (String filePath) {
-        Scan scan = null;
+    public static int parseAndRun(InputStream file, Context context) {
         ErrorTracker errTr = new ErrorTracker();
-        try {
-            scan = new Scan(new Source(filePath), errTr);
-        } catch (FileNotFoundException | UnsupportedEncodingException e) {
-            System.out.println("Błąd: nie udało się otworzeć pliku źródłowego.");
-            return 1;
-        }
+        Scan scan = new Scan(new Source(file), errTr);
         Parser parser = new Parser(scan, errTr);
         try {
             parser.start();
         } catch (Exception e) {
-            e.printStackTrace();
+            Toast.makeText(context, "Exception: " + e.toString(), Toast.LENGTH_LONG).show();
+            return 1;
+        }
+        if (errTr.getErrorsNum() != 0)
+        {
+            Toast.makeText(context, "Przed ponownym włączeniem popraw błędy: " +
+                            errTr.getErrorsMsg().toString(),
+                    Toast.LENGTH_LONG).show();
+            return 1;
         }
         Environment e = new Environment();
         parser.run(e);
-        return 1;
+        return 0;
     }
 
 }

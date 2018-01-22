@@ -7,7 +7,9 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.InputStream;
 import java.util.List;
 
 import tkom.kkomar.przypominajka.Main;
@@ -21,6 +23,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 
     private List<NotesBuilder> notesList;
     private final OnItemClickListener listener;
+    private ViewGroup parent;
 
     NotesAdapter(List<NotesBuilder> notesList, OnItemClickListener listener) {
         this.notesList = notesList;
@@ -30,6 +33,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
     // Create new views (invoked by the layout manager)
     @Override
     public NotesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        this.parent = parent;
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.row_layout, parent, false);
         ViewHolder viewHolder = new ViewHolder(itemView);
@@ -40,7 +44,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         NotesBuilder colorItem = notesList.get(position);
-        holder.bind(colorItem, listener);
+        holder.bind(colorItem, listener, parent);
     }
 
     // Return the size of dataset (invoked by the layout manager)
@@ -62,7 +66,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
             onoff = view.findViewById(R.id.turnoff_on);
         }
 
-        public void bind(final NotesBuilder item, final OnItemClickListener listener) {
+        public void bind(final NotesBuilder item, final OnItemClickListener listener, final ViewGroup parent) {
             title.setText(item.getTitle());
             content.setText(item.getContent());
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -75,9 +79,14 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked == true)
                     {
-                        if (Main.runParser(item.getTitle()) == 0);// uruchom przypominajkę
-                        {
-                            //
+                        try {
+                            InputStream in = parent.getContext().openFileInput(item.getTitle());
+                            if (in != null) {
+                                Main.parseAndRun(in, parent.getContext());
+                                in.close();
+                            }
+                        } catch (java.io.FileNotFoundException e) {} catch (Throwable t) {
+                            Toast.makeText(parent.getContext(), "Exception: " + t.toString(), Toast.LENGTH_LONG).show();
                         }
                     }
                 }

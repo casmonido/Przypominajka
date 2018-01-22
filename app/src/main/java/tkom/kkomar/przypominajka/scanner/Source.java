@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
@@ -13,8 +14,9 @@ public class Source {
 	private BufferedReader bufferedReader; 
 	private TextPos currentPos = new TextPos();
 
-	public Source (String srcFileName) throws FileNotFoundException, UnsupportedEncodingException {
-		InputStreamReader fileReader = new InputStreamReader(new FileInputStream(srcFileName), "UTF8");
+
+	public Source (InputStream in) {
+		InputStreamReader fileReader = new InputStreamReader( in );
 		bufferedReader = new BufferedReader(fileReader);
 	}
 
