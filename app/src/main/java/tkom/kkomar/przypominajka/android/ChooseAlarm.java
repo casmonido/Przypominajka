@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.SwipeDismissBehavior;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,7 +19,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import tkom.kkomar.przypominajka.R;
@@ -26,15 +27,18 @@ import tkom.kkomar.przypominajka.R;
 public class ChooseAlarm extends AppCompatActivity {
 
 
-        private List <NotesBuilder> notesList = new LinkedList<> ();
+        private ArrayList <NotesBuilder> notesList = new ArrayList<>();
         private NotesAdapter nAdapter;
         private RecyclerView notesRecycler;
         public static Vibrator mVibrator;
+        private static String SWITCH_STATES = "SWITCH_STATES";
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            mVibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+            if (savedInstanceState != null)
+                notesList = savedInstanceState.getParcelableArrayList(SWITCH_STATES);
+            mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             setContentView(R.layout.activity_choose_alarm);
             Toolbar toolbar = findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
@@ -53,6 +57,15 @@ public class ChooseAlarm extends AppCompatActivity {
             refreshActivity();
         }
 
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(SWITCH_STATES, notesList);
+        super.onSaveInstanceState(outState);
+    }
+
+
         @Override
         public void onRestart()
         {
@@ -61,15 +74,18 @@ public class ChooseAlarm extends AppCompatActivity {
         }
 
         private void prepareNotes() {
-            notesList.clear();
             File directory;
             directory = getFilesDir();
             File[] files = directory.listFiles();
             String theFile;
             for (int f = 1; f <= files.length; f++) {
                 theFile = "alarm_" + f;
-                NotesBuilder note = new NotesBuilder(theFile, open(theFile));
-                notesList.add(note);
+                if (notesList.size() >= f)
+                    notesList.get(f-1).setData(theFile, open(theFile));
+                else {
+                    NotesBuilder note = new NotesBuilder(theFile, open(theFile)); //, double.get(f-1).isOn
+                    notesList.add(note);
+                }
             }
         }
 

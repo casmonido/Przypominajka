@@ -24,12 +24,12 @@ public class AlarmReceiver extends BroadcastReceiver {
     public static String repeatEveryStr = "repeatEvery";
     public static String startMillisStr = "startMillis";
 
-    public void parseAndRun(String title, Context context) throws IOException {
+    public int parse(String title, Context context) throws IOException {
 
         int repeatEvery = 0;
         InputStream file = context.openFileInput(title);
         if (file == null)
-            return;
+            throw new IOException("Nie udało się otworzyć pliku!");
         ErrorTracker errTr = new ErrorTracker();
         Scan scan = new Scan(new Source(file), errTr);
         Parser parser = new Parser(scan, errTr);
@@ -39,17 +39,17 @@ public class AlarmReceiver extends BroadcastReceiver {
                 repeatEvery = 1; //duzo
         } catch (Exception e) {
             Toast.makeText(context, "Exception: " + e.toString(), Toast.LENGTH_LONG).show();
-            return;
+            return 1;
         }
         if (errTr.getErrorsNum() != 0)
         {
             Toast.makeText(context, "Przed ponownym włączeniem popraw błędy: " +
                             errTr.getErrorsMsg().toString(),
                     Toast.LENGTH_LONG).show();
-            return;
+            return 0;
         }
-        setupAlarm(context, title, repeatEvery);
         file.close();
+        return  repeatEvery;
     }
 
 
@@ -91,7 +91,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         Toast.makeText(context, "!!! alarm test receved", Toast.LENGTH_SHORT).show();
     }
 
-    private void cancelAlarm(Context context, String filename, int repeatEvery, long startMillis)
+    public static void cancelAlarm(Context context, String filename, int repeatEvery, long startMillis)
     {
         AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiver.class);
@@ -100,7 +100,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         alarmMgr.cancel(alarmIntent);
     }
 
-    private Bundle createBundle(String filename, int repeatEvery, long startMillis)
+    private static Bundle createBundle(String filename, int repeatEvery, long startMillis)
     {
         Bundle b = new Bundle();
         b.putString(fileNameStr, filename);
@@ -109,11 +109,10 @@ public class AlarmReceiver extends BroadcastReceiver {
         return b;
     }
 
-    private void setupAlarm(Context context, String filename, int repeatEvery)
+    public static void setupAlarm(Context context, String filename, int repeatEvery, long startMillis)
     {
         AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiver.class);
-        long startMillis = System.currentTimeMillis(); //
         intent.putExtras(createBundle(filename, repeatEvery, startMillis));
         PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, startMillis,

@@ -69,6 +69,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
         public void bind(final NotesBuilder item, final OnItemClickListener listener, final ViewGroup parent) {
             title.setText(item.getTitle());
             content.setText(item.getContent());
+            onoff.setChecked(item.isOn);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     listener.onItemClick(item);
@@ -81,10 +82,21 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
                     {
                         try {
                             AlarmReceiver main = new AlarmReceiver();
-                            main.parseAndRun(item.getTitle(), parent.getContext());
+                            item.repeatEvery = main.parse(item.getTitle(), parent.getContext());
                         } catch (java.io.FileNotFoundException e) {} catch (Throwable t) {
                             Toast.makeText(parent.getContext(), "Exception: " + t.toString(), Toast.LENGTH_LONG).show();
+                            return;
                         }
+                        item.isOn = true;
+                        item.startMillis = System.currentTimeMillis();
+                        AlarmReceiver.cancelAlarm(parent.getContext(), item.filename,
+                                item.repeatEvery, item.startMillis);
+                    }
+                    else
+                    {
+                        item.isOn = false;
+                        AlarmReceiver.cancelAlarm(parent.getContext(), item.filename,
+                                item.repeatEvery, item.startMillis);
                     }
                 }
             });
