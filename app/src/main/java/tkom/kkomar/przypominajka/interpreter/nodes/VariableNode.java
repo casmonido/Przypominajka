@@ -32,7 +32,7 @@ public class VariableNode implements Node {
 	public TypedValue evalNode(Environment env) throws RuntimeException  {
 		TypedValue tv = ident.evalNode(env);
 		if (tv == null)
-			throw new RuntimeException("Zmienna " + ((IdentNode)ident).ident + " nie została zainicjalizowana!");
+			throw new RuntimeException("Zmienna nie została zainicjalizowana!");
 		Object obj = tv.getValue();
 		Type typ = tv.getType();
 		if (numVal != null && !obj.getClass().isArray()) 

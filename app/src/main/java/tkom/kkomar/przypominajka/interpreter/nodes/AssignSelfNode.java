@@ -20,7 +20,7 @@ public abstract class AssignSelfNode implements Node {
 	public TypedValue evalNode(Environment env) throws RuntimeException {
 		TypedValue value = val.evalNode(env);
 		TypedValue existing = env.resolve(((IdentNode)var.ident).ident);
-		if (existing == null)
+		if (existing == null) // to nie zawsze jest problem, np vibrate()...
 			throw new RuntimeException("Zmienna " + ((IdentNode)var.ident).ident + " nie została zainicjalizowana!");
 		if (value.getType().equals(existing.getType()))
 			throw new RuntimeException("Próba zastosowania operatora " + getOperator() + " między obiektami różnych typów: " +

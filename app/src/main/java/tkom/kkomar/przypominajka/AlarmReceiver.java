@@ -80,8 +80,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         }
         Environment e = new Environment();
         try {
-            if (parser.run(e))
-                cancelAlarm(context, title, repeatEvery, startMillis);
+            parser.run(e);
         } catch (tkom.kkomar.przypominajka.exceptions.RuntimeException re) {
             Toast.makeText(context, "Błąd wykonania: " + re.getMessage(),
                     Toast.LENGTH_LONG).show();

@@ -85,11 +85,13 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
                             item.repeatEvery = main.parse(item.getTitle(), parent.getContext());
                         } catch (java.io.FileNotFoundException e) {} catch (Throwable t) {
                             Toast.makeText(parent.getContext(), "Exception: " + t.toString(), Toast.LENGTH_LONG).show();
+                            onoff.setChecked(false);
+                            item.isOn = false;
                             return;
                         }
                         item.isOn = true;
                         item.startMillis = System.currentTimeMillis();
-                        AlarmReceiver.cancelAlarm(parent.getContext(), item.filename,
+                        AlarmReceiver.setupAlarm(parent.getContext(), item.filename,
                                 item.repeatEvery, item.startMillis);
                     }
                     else

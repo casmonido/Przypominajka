@@ -20,11 +20,13 @@ public class NotesBuilder implements Parcelable {
 
     public void setData(String title, String content) {
         this.title = title;
+        this.filename = title;
         this.content = content;
     }
 
     public NotesBuilder(String title, String content) {
         this.title = title;
+        this.filename = title;
         this.content = content;
         //this.isOn = isOn;
     }
