@@ -65,7 +65,8 @@ public class VariableNode implements Node {
 	
 	
 	private Atom getAtomType(Object value) {
-		if (value instanceof Long) 
+		if (value instanceof Long ||
+				value instanceof  Integer)
 			return Atom.typeInt;
 		if (value instanceof Double) 
 			return Atom.typeDouble;
