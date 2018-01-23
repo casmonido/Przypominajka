@@ -57,13 +57,9 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String title = "";
         Parser parser = null;
-        int repeatEvery = 1;
-        long startMillis = 0;
         Bundle b = intent.getExtras();
         if(b != null) {
             title = b.getString(fileNameStr);
-            repeatEvery = b.getInt(repeatEveryStr);
-            startMillis = b.getLong(startMillisStr);
         }
         try (InputStream file = context.openFileInput(title)) {
             if (file == null)

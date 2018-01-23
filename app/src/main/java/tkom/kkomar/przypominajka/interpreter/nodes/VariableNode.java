@@ -31,6 +31,8 @@ public class VariableNode implements Node {
 	@Override
 	public TypedValue evalNode(Environment env) throws RuntimeException  {
 		TypedValue tv = ident.evalNode(env);
+		if (numVal == null && attrib == null)
+			return tv;
 		if (tv == null)
 			throw new RuntimeException("Zmienna nie została zainicjalizowana!");
 		Object obj = tv.getValue();
